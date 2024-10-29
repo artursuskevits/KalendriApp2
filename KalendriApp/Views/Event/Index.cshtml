@@ -1,0 +1,93 @@
+﻿@model IEnumerable<KalenderApp.Models.Event>
+
+@{
+    ViewData["Title"] = "Kalender";
+}
+<header style="background-color: #333; padding: 10px; color: #fff; font-family: Arial, sans-serif;">
+    <nav style="display: flex; justify-content: center; gap: 20px;">
+        <a href="/Home/Index" style="color: #fff; text-decoration: none; font-weight: bold;">Avaleht</a> |
+        <a href="/Event/Index" style="color: #fff; text-decoration: none; font-weight: bold;">Minu sündmused</a> |
+        <a href="/Account/Login" style="color: #fff; text-decoration: none; font-weight: bold;">Logi sisse</a> |
+        <a href="/Account/Register" style="color: #fff; text-decoration: none; font-weight: bold;">Registreeru</a>
+    </nav>
+</header>
+
+<h2 class="title">Minu sündmused</h2>
+
+<a href="/Event/Create" class="btn btn-success create-btn">Loo uus sündmus</a>
+
+<table class="event-table">
+    <thead>
+        <tr>
+            <th>Pealkiri</th>
+            <th>Kirjeldus</th>
+            <th>Algus</th>
+            <th>Lõpp</th>
+            <th>Kategooria</th>
+            <th>Toimingud</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var evnt in Model)
+        {
+            <tr>
+                <td>@evnt.Title</td>
+                <td>@evnt.Description</td>
+                <td>@evnt.StartDateTime</td>
+                <td>@evnt.EndDateTime</td>
+                <td>@evnt.Category?.Name</td>
+                <td>
+                    <a href="/Event/Edit/@evnt.Id" class="btn btn-warning btn-sm">Muuda</a>
+                    <a href="/Event/Delete/@evnt.Id" class="btn btn-danger btn-sm">Kustuta</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .title {
+        text-align: center;
+        color: #333;
+        margin-top: 20px;
+        font-size: 24px;
+    }
+
+    .create-btn {
+        display: inline-block;
+        margin: 10px 0;
+        background-color: #28a745;
+        color: white;
+        padding: 8px 15px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .event-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+        .event-table th, .event-table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+    .btn-warning, .btn-danger {
+        padding: 6px 10px;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+    }
+</style>

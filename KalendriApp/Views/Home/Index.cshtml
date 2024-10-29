@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaleht - Kalendriäpp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f5;
+            color: #333;
+            text-align: center;
+        }
+        header {
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+        }
+        .nav-links a {
+            color: #fff;
+            margin: 0 10px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .btn {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        .btn-success {
+            background-color: #28a745;
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Kalendriäpp</h1>
+        <div class="nav-links">
+            <a href="/Home/Index">Avaleht</a>
+            <a href="/Event/Index">Kalender</a>
+            <a href="/Account/Login">Logi sisse</a>
+            <a href="/Account/Register">Registreeru</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2>Tere tulemast Kalendriäpp!</h2>
+        <p>Hallake oma sündmusi ja kohtumisi mugava kalendriliidese kaudu.</p>
+
+        <div>
+            <a href="/Event/Index" class="btn">Vaata kalendrit</a>
+            <a href="/Event/Create" class="btn btn-success">Lisa sündmus</a>
+        </div>
+    </div>
+</body>
+</html>

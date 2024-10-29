@@ -1,0 +1,56 @@
+﻿@model KalenderApp.Models.Event
+
+@{
+    ViewData["Title"] = "Loo uus sündmus";
+}
+
+<header style="background-color: #333; padding: 10px; color: #fff; font-family: Arial, sans-serif;">
+    <nav style="display: flex; justify-content: center; gap: 20px;">
+        <a href="/Home/Index" style="color: #fff; text-decoration: none; font-weight: bold;">Avaleht</a> |
+        <a href="/Event/Index" style="color: #fff; text-decoration: none; font-weight: bold;">Minu sündmused</a>
+    </nav>
+</header>
+
+<h2 class="title">Loo uus sündmus</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="Title">Pealkiri</label>
+        <input name="Title" type="text" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="Description">Kirjeldus</label>
+        <input name="Description" type="text" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="StartDateTime">Algus</label>
+        <input name="StartDateTime" type="datetime-local" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="EndDateTime">Lõpp</label>
+        <input name="EndDateTime" type="datetime-local" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Salvesta</button>
+</form>
+
+<style>
+    .title {
+        text-align: center;
+        margin-top: 20px;
+        color: #333;
+        font-size: 24px;
+    }
+
+    .form-group {
+        margin-top: 15px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>

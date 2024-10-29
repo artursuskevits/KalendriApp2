@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Kalendriäpp</title>
+    <link rel="stylesheet" href="~/css/site.css" /> <!-- Проверьте путь к CSS -->
+</head>
+<body>
+    <header>
+        <nav>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-link">Avaleht</a>
+            <a asp-controller="Event" asp-action="Index" class="btn btn-link">Kalender</a>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="Account" asp-action="Logout" class="btn btn-link">Logi välja</a>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="Login" class="btn btn-link">Logi sisse</a>
+                <a asp-controller="Account" asp-action="Register" class="btn btn-link">Registreeru</a>
+            }
+        </nav>
+    </header>
+
+    <main role="main" class="container">
+        @RenderBody()
+    </main>
+
+    <footer>
+        <p>&copy; 2023 - Kalendriäpp</p>
+    </footer>
+</body>
+</html>
