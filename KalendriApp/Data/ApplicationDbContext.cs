@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using KalenderApp.Models;
+using BCrypt.Net;
 
 namespace KalenderApp.Data
 {
@@ -25,11 +26,26 @@ namespace KalenderApp.Data
                 new Category { Id = 3, Name = "Семья", Color = "#0000FF" }
             );
 
-            // Начальное заполнение для таблицы Users
-            modelBuilder.Entity<KalenderApp.Models.User>().HasData(
-        new KalenderApp.Models.User { Id = 1, Name = "Admin", Email = "admin@example.com", Password = "adminpassword", Timezone = "Europe/Tallinn" },
-        new KalenderApp.Models.User { Id = 2, Name = "User", Email = "user@example.com", Password = "userpassword", Timezone = "Europe/Tallinn" }
-    );
+            // Начальное заполнение для таблицы Users с зашифрованными паролями
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    Name = "Admin",
+                    Email = "admin@example.com",
+                    Password = BCrypt.Net.BCrypt.HashPassword("adminpassword"),
+                    Timezone = "Europe/Tallinn"
+                },
+                new User
+                {
+                    Id = 2,
+                    Name = "User",
+                    Email = "user@example.com",
+                    Password = BCrypt.Net.BCrypt.HashPassword("userpassword"),
+                    Timezone = "Europe/Tallinn"
+                }
+            );
+
             // Начальное заполнение для таблицы Events
             modelBuilder.Entity<Event>().HasData(
                 new Event

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Controllers/AccountController.cs
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using KalenderApp.Data;
 using KalenderApp.Models;
 using System.Threading.Tasks;
@@ -10,10 +12,12 @@ namespace KalenderApp.Controllers
     public class AccountController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(ApplicationDbContext context)
+        public AccountController(ApplicationDbContext context, ILogger<AccountController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: /Account/Login
@@ -27,22 +31,20 @@ namespace KalenderApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
-            if (user != null)
+            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
-                // Сохраняем UserId в сессии
+                // Save UserId in session if the password is verified
                 HttpContext.Session.SetInt32("UserId", user.Id);
                 return RedirectToAction("Index", "Event");
             }
 
-            // Если неверные учетные данные
+            // Incorrect credentials
             ViewBag.ErrorMessage = "Неверный email или пароль.";
             return View();
         }
 
-        // GET: /Account/Register
         [HttpGet]
         public IActionResult Register()
         {
@@ -51,32 +53,41 @@ namespace KalenderApp.Controllers
 
         // POST: /Account/Register
         [HttpPost]
+        // POST: /Account/Register
+      
         public async Task<IActionResult> Register(User newUser)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                // Проверка на наличие пользователя с таким же email
-                var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == newUser.Email);
-                if (existingUser == null)
-                {
-                    _context.Users.Add(newUser);
-                    await _context.SaveChangesAsync();
-
-                    // Сразу авторизуем пользователя после регистрации
-                    HttpContext.Session.SetInt32("UserId", newUser.Id);
-                    return RedirectToAction("Index", "Event");
-                }
-                else
-                {
-                    ViewBag.ErrorMessage = "Пользователь с таким email уже существует.";
-                }
+                ViewBag.ErrorMessage = "Vigane vormi sisend.";
+                return View(newUser);
             }
-            return View();
+
+            // Устанавливаем таймзону по умолчанию, если она не была указана
+            newUser.Timezone ??= "Europe/Tallinn";
+
+            // Проверка наличия пользователя с таким же email
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == newUser.Email);
+            if (existingUser != null)
+            {
+                ViewBag.ErrorMessage = "Kasutaja selle e-posti aadressiga on juba olemas.";
+                return View(newUser);
+            }
+
+            // Хешируем пароль перед сохранением
+            newUser.Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+
+            // Устанавливаем сессию для нового пользователя
+            HttpContext.Session.SetInt32("UserId", newUser.Id);
+            return RedirectToAction("Index", "Event");
         }
+
 
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear(); // Очищаем сессию
+            HttpContext.Session.Clear(); // Clear session
             return RedirectToAction("Login");
         }
     }
