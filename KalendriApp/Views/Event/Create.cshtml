@@ -1,56 +1,101 @@
 ﻿@model KalenderApp.Models.Event
 
 @{
-    ViewData["Title"] = "Loo uus sündmus";
+    ViewData["Title"] = "Loo sündmus";
 }
 
-<header style="background-color: #333; padding: 10px; color: #fff; font-family: Arial, sans-serif;">
-    <nav style="display: flex; justify-content: center; gap: 20px;">
-        <a href="/Home/Index" style="color: #fff; text-decoration: none; font-weight: bold;">Avaleht</a> |
-        <a href="/Event/Index" style="color: #fff; text-decoration: none; font-weight: bold;">Minu sündmused</a>
-    </nav>
-</header>
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        .container {
+            max-width: 400px;
+            padding: 20px;
+            margin: auto;
+            background-color: #fff;
+            border-radius: 8px;
+            font-family: Arial, sans-serif;
+        }
 
-<h2 class="title">Loo uus sündmus</h2>
+        .form-group {
+            margin-bottom: 15px;
+        }
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label for="Title">Pealkiri</label>
-        <input name="Title" type="text" class="form-control" required />
+        label {
+            font-weight: bold;
+            display: block;
+        }
+
+        input[type="text"], input[type="datetime-local"], select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>@ViewData["Title"]</h2>
+        <form asp-action="Create" method="post">
+            <div class="form-group">
+                <label for="Title">Pealkiri</label>
+                <input type="text" name="Title" required />
+            </div>
+            <div class="form-group">
+                <label for="Description">Kirjeldus</label>
+                <input type="text" name="Description" />
+            </div>
+            <div class="form-group">
+                <label for="StartDateTime">Algus</label>
+                <input type="datetime-local" name="StartDateTime" required />
+            </div>
+            <div class="form-group">
+                <label for="EndDateTime">Lõpp</label>
+                <input type="datetime-local" name="EndDateTime" />
+            </div>
+            <div class="form-group">
+                <label for="Recurrence">Kordus</label>
+                <select name="Recurrence">
+                    <option value="none">Ei kordu</option>
+                    <option value="daily">Igapäevane</option>
+                    <option value="weekly">Iganädalane</option>
+                    <option value="monthly">Igakuine</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="CategoryId">Kategooria</label>
+                <select name="CategoryId" required>
+                    <option value="1">Töö</option>
+                    <option value="2">Isiklik</option>
+                    <option value="3">Pere</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Timezone">Ajatsoon</label>
+                <input type="text" name="Timezone" value="Europe/Tallinn" required />
+            </div>
+            <div class="form-group">
+                <label for="Reminder">Meeldetuletus</label>
+                <select name="Reminder">
+                    <option value="none">Ei ole</option>
+                    <option value="email">E-post</option>
+                    <option value="notification">Teavitus</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-primary">Loo sündmus</button>
+        </form>
     </div>
-    <div class="form-group">
-        <label for="Description">Kirjeldus</label>
-        <input name="Description" type="text" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label for="StartDateTime">Algus</label>
-        <input name="StartDateTime" type="datetime-local" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label for="EndDateTime">Lõpp</label>
-        <input name="EndDateTime" type="datetime-local" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary mt-3">Salvesta</button>
-</form>
-
-<style>
-    .title {
-        text-align: center;
-        margin-top: 20px;
-        color: #333;
-        font-size: 24px;
-    }
-
-    .form-group {
-        margin-top: 15px;
-    }
-
-    .btn-primary {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 8px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-</style>
+</body>
+</html>
